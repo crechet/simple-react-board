@@ -1,0 +1,26 @@
+.dialog-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: rgba(200, 77, 77, 0.7);
+    animation-duration: .3s;
+    animation-name: fadeIn;
+}
+
+.dialog-content {
+    $width: 40%;
+    width: $width;
+    border: 1px solid $coral-darkest;
+    border-radius: $base-border-radius;
+    background: $coral-darker;
+    position: absolute;
+    pointer-events: all;
+    top: calc($base-spacing*5);
+    left: 50%;
+    margin-left: calc(-$width/2);
+    animation-duration: .3s;
+    animation-name: fadeIn;
+}

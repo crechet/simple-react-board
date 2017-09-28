@@ -1,0 +1,20 @@
+.board-container {
+  position: relative;
+  height: calc(100vh - 7em);
+}
+
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  user-select: none;
+  white-space: nowrap;
+  padding-bottom: 1em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

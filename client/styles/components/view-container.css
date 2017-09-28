@@ -1,0 +1,16 @@
+.view-container {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 0 $base-spacing;
+}
+
+.view-container__header {
+  padding: calc($base-spacing/2) 0;
+}
+
+.view-container__title {
+  display: inline-block;
+  margin-right: .5em;
+}

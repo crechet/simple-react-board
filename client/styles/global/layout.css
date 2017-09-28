@@ -1,0 +1,28 @@
+@import "settings.css";
+
+/** {
+  animation: fadeIn 1000ms;
+}*/
+
+html {
+  height: 100vh;
+}
+
+body {
+  height: 100vh;
+  font-size: 1em;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.application-container {
+  height: 100vh;
+  background-color: $coral-lighter;
+}
+
+a {
+  text-decoration: none;
+  &:hover, &:visited, &:active, &:link {
+    color: inherit;
+    text-decoration: none;
+  }
+}

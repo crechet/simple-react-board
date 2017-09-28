@@ -1,0 +1,8 @@
+.edit-card-form {
+    padding: 1em;
+}
+
+.edit-card__textarea {
+    resize: vertical;
+    max-height: 250px;
+}

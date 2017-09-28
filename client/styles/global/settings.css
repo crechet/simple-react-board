@@ -1,0 +1,20 @@
+/* Variables */
+$base-line-height: 1.5;
+$base-spacing: 1.5em;
+$base-border-radius: 5px;
+
+/* Colors */
+$coral-lightest: #FFF8DC;
+$coral-lighter: #faebd7;
+$coral: #F08080;
+$coral-darker: #FFAFAF;
+$coral-darkest: #C84D4D;
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
