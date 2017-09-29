@@ -37,13 +37,11 @@ export default function (state = {}, action) {
             return _.omit(state, action.payload.data._id);
 
         case constants.API_UPDATE_LIST:
-            console.log(`ACTION.type: ${action.type}`, action.payload);
             return { ...state, [action.payload.data._id]: action.payload.data };
 
         case constants.UPDATE_LISTS_ON_DROP:
-            console.log(`ACTION.type: ${action.type}`, action.payload);
-
-            return state;
+            let { updatedSource, updatedTarget } = action.payload;
+            return { ...state, [updatedSource._id]: updatedSource, [updatedTarget._id]: updatedTarget };
 
         // Old...
         case constants.UPDATE_CARD_LISTS_ON_DROP:

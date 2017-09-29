@@ -11,9 +11,13 @@ module.exports = (app) => {
     });
 
     // Update list.
-    app.post('/api/list/:id', (req, res) => {
+    app.put('/api/list', (req, res) => {
         let { _id, name, position } = req.body;
-        List.findOneAndUpdate({ _id }, { name, position })
+        let toUpdate = {};
+        if (name) toUpdate.name = name;
+        if (position) toUpdate.position = position;
+
+        List.findOneAndUpdate({ _id }, toUpdate, { new: true })
             .then((list) => {
                 res.send(list);
             })

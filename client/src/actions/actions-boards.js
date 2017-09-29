@@ -34,7 +34,8 @@ export const apiDeleteList = (listId) => (dispatch) => {
 };
 
 export const apiUpdateList = (data) => (dispatch) => {
-    axios.post(`${ROOT_URL}/api/list/${data._id}`, data)
+    console.log('ACTION apiUpdateList', data);
+    axios.put(`${ROOT_URL}/api/list`, data)
         .then((list) => {
             dispatch({
                 type: constants.API_UPDATE_LIST,
@@ -44,14 +45,14 @@ export const apiUpdateList = (data) => (dispatch) => {
 };
 
 export const updateListsOnDrop = ({ source, target }) => (dispatch) => {
-    console.log('ACTION updateListsOnDrop', source, target);
-    let updateSource = axios.post(`${ROOT_URL}/api/list/${source._id}`, { position: target.position });
-    let updateTarget = axios.post(`${ROOT_URL}/api/list/${target._id}`, { position: source.position });
+    let updateSource = axios.put(`${ROOT_URL}/api/list`, { _id: source._id, position: target.position });
+    let updateTarget = axios.put(`${ROOT_URL}/api/list`, { _id: target._id, position: source.position });
+
     Promise.all([updateSource, updateTarget])
         .then((response) => {
             dispatch({
                 type: constants.UPDATE_LISTS_ON_DROP,
-                payload: { sourceNewPosition: response[0].data, targetNewPosition: response[1].data }
+                payload: { updatedSource: response[0].data, updatedTarget: response[1].data }
             });
         });
 };

@@ -36,7 +36,6 @@ class Board extends Component {
 
     // Call Update CardList Action Creator.
     handleDropCardList({ source, target }) {
-        console.log('list dropped');
         this.props.updateListsOnDrop({ source, target });
     }
 
