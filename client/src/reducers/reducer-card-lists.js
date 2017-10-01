@@ -30,6 +30,11 @@ export default function (state = {}, action) {
 
         case constants.API_FETCH_LISTS:
             let payloadObject = _.keyBy(action.payload, '_id');
+
+            payloadObject = _.each(payloadObject, (list) => {
+                list.cards = _.keyBy(list.cards, '_id');
+            });
+
             console.log('lists:', payloadObject);
             return payloadObject;
 
@@ -43,16 +48,14 @@ export default function (state = {}, action) {
             let { updatedSource, updatedTarget } = action.payload;
             return { ...state, [updatedSource._id]: updatedSource, [updatedTarget._id]: updatedTarget };
 
-        // Old...
-        case constants.UPDATE_CARD_LISTS_ON_DROP:
-            source = action.payload.source;
-            target = action.payload.target;
-            updatedState = _.clone(state);
+        case constants.ADD_CARD_TO_LIST:
+            console.log('reducer ADD_CARD_TO_LIST', action.payload);
+            let listToUpdate = state[action.payload.list];
+            listToUpdate.cards[action.payload._id] = action.payload;
+            console.log('listToUpdate', listToUpdate);
+            // TODO add card to state...
 
-            updatedState[source.id].position = target.position;
-            updatedState[target.id].position = source.position;
-
-            return updatedState;
+            return { ...state, [action.payload.list]: listToUpdate };
 
         case constants.UPDATE_CARD_LISTS_ON_CARD_DROP:
             function cleanCards(cards, badId) {
@@ -92,21 +95,6 @@ export default function (state = {}, action) {
                 updatedState[tempTarget.listId].cards[tempTarget.id] = tempTarget;
                 updatedState[tempSource.listId].cards[tempSource.id] = tempSource;
             }
-            return updatedState;
-
-        case constants.ADD_CARD:
-            name = action.payload.name;
-            cardListId = action.payload.cardListId;
-
-            updatedState = {...state};
-            cardId = Date.now().toString();
-            updatedState[cardListId].cards[cardId] = {
-                id: cardId,
-                listId: cardListId,
-                position: _.size(updatedState[cardListId].cards).toString(),
-                name: name
-            };
-
             return updatedState;
 
         case constants.FETCH_CARD:

@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const List = mongoose.model('lists');
+const Card = mongoose.model('cards');
 
 module.exports = (app) => {
     // Get all lists.
     app.get('/api/list', (req, res) => {
         List.find({})
+            .populate('cards')
             .then((response) => {
                 res.send(response);
             });
@@ -45,6 +47,30 @@ module.exports = (app) => {
         List.findOneAndRemove({ _id: req.params.id })
             .then((result) => {
                 res.status(200).send(result);
+            });
+    });
+
+    // Add new card.
+    app.post('/api/card', (req, res) => {
+        let { listId, name } = req.body;
+        let position;
+
+        List.findOne({ _id: listId })
+            .then((list) => {
+                position = list.cards.length + 1;
+
+                let card = new Card({ name, position });
+                list.cards.push(card);
+                card.list = list._id;
+
+                Promise.all([card.save(), list.save()])
+                    .then((response) => {
+                        // Response with created card.
+                        res.send(response[0]);
+                    })
+            })
+            .catch((error) => {
+                res.send(error);
             });
     });
 };

@@ -3,7 +3,11 @@ const { Schema } = mongoose;
 
 const listSchema = new Schema({
     name: String,
-    position: Number
+    position: Number,
+    cards: [{
+        type: Schema.Types.ObjectId,
+        ref: 'cards'
+    }]
 });
 
 mongoose.model('lists', listSchema);

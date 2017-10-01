@@ -147,7 +147,7 @@ class CardList extends Component {
         });
 
         return _.map(sortedCards, (card) => {
-            return <Card key={card.id}
+            return <Card key={card._id}
                          card={card}
                          listId={card.listId}
                          onDrop={this.handleCardDrop} />;

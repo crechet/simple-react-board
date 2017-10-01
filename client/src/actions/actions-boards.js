@@ -57,20 +57,16 @@ export const updateListsOnDrop = ({ source, target }) => (dispatch) => {
         });
 };
 
-// Old...
-export function updateCardListsOnDrop({ source, target }) {
-    return {
-        type: constants.UPDATE_CARD_LISTS_ON_DROP,
-        payload: { source, target }
-    }
-}
-
-export function addCard(values) {
-    return {
-        type: constants.ADD_CARD,
-        payload: values
-    }
-}
+export const addCardToList = (card) => (dispatch) => {
+    console.log('ACTION addCardToList', card);
+    axios.post(`${ROOT_URL}/api/card`, card)
+        .then((response) => {
+            dispatch({
+                type: constants.ADD_CARD_TO_LIST,
+                payload: response.data
+            });
+        });
+};
 
 export function fetchCard(data) {
     return {

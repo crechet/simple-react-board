@@ -85,7 +85,7 @@ class Card extends Component {
 
 function mapStateToProps({ cardLists }, ownProps) {
     const { card } = ownProps;
-    return { card: cardLists[card.listId].cards[card.id] }
+    return { card: cardLists[card.list].cards[card._id] }
 }
 
 export default connect(mapStateToProps)(Card);

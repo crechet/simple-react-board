@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { ReactPageClick } from 'react-page-click';
 
-import { addCard } from '../actions/actions-boards';
+import { addCardToList } from '../actions/actions-boards';
 
 @reduxForm({ form: 'AddCardForm' })
 class AddCardForm extends Component {
@@ -30,9 +30,9 @@ class AddCardForm extends Component {
     onSubmit(values) {
         const card = {
             name: values.cardName,
-            cardListId: this.props.cardListId
+            listId: this.props.cardListId
         };
-        this.props.addCard(card);
+        this.props.addCardToList(card);
         this.props.onCancelClicked();
     }
 
@@ -62,6 +62,6 @@ class AddCardForm extends Component {
     }
 }
 
-export default connect(null, { addCard })(AddCardForm);
+export default connect(null, { addCardToList })(AddCardForm);
 
 AddCardForm.propTypes = {};
