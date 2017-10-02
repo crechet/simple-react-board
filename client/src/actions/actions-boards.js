@@ -58,7 +58,6 @@ export const updateListsOnDrop = ({ source, target }) => (dispatch) => {
 };
 
 export const addCardToList = (card) => (dispatch) => {
-    console.log('ACTION addCardToList', card);
     axios.post(`${ROOT_URL}/api/card`, card)
         .then((response) => {
             dispatch({

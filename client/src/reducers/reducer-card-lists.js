@@ -22,21 +22,25 @@ export default function (state = {}, action) {
     let data;
     let source;
     let target;
+    
+    function convertCards(list) {
+        list.cards = _.keyBy(list.cards, '_id');
+    }
 
     switch (action.type) {
         case constants.API_ADD_LIST:
-            let { data } = action.payload;
-            return { ...state, [data._id]: data };
+            convertCards(action.payload.data);
+            return { ...state, [action.payload.data._id]: action.payload.data };
 
         case constants.API_FETCH_LISTS:
-            let payloadObject = _.keyBy(action.payload, '_id');
+            let listsCollection = _.keyBy(action.payload, '_id');
 
-            payloadObject = _.each(payloadObject, (list) => {
-                list.cards = _.keyBy(list.cards, '_id');
+            listsCollection = _.each(listsCollection, (list) => {
+                convertCards(list);
             });
 
-            console.log('lists:', payloadObject);
-            return payloadObject;
+            console.log('lists:', listsCollection);
+            return listsCollection;
 
         case constants.API_DELETE_LIST:
             return _.omit(state, action.payload.data._id);
@@ -49,12 +53,8 @@ export default function (state = {}, action) {
             return { ...state, [updatedSource._id]: updatedSource, [updatedTarget._id]: updatedTarget };
 
         case constants.ADD_CARD_TO_LIST:
-            console.log('reducer ADD_CARD_TO_LIST', action.payload);
-            let listToUpdate = state[action.payload.list];
+            let listToUpdate = { ...state[action.payload.list] };
             listToUpdate.cards[action.payload._id] = action.payload;
-            console.log('listToUpdate', listToUpdate);
-            // TODO add card to state...
-
             return { ...state, [action.payload.list]: listToUpdate };
 
         case constants.UPDATE_CARD_LISTS_ON_CARD_DROP:
