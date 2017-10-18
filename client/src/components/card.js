@@ -11,7 +11,7 @@ import dndTypes from '../constants/dnd-types';
 const cardSource = {
     beginDrag(props) {
         const card = props.card;
-        const item = { id: card.id, position: card.position, listId: card.listId };
+        const item = { id: card._id, position: card.position, listId: card.list };
         return item;
     }
 };
@@ -68,14 +68,14 @@ class Card extends Component {
     }
 
     render() {
-        const { id } = this.props.card;
-        const { connectDragSource, connectDropTarget, isDragging, highlighted, listId } = this.props;
+        const { _id, list } = this.props.card;
+        const { connectDragSource, connectDropTarget, isDragging, highlighted } = this.props;
 
         const className = `card${highlighted && !isDragging ? " " + "card_highlighted-as-drop-target" : ""}`;
 
         return connectDragSource(connectDropTarget(
             <div className={className}>
-                <Link className="card-link" to={`/list/${listId}/card/${id}`}>
+                <Link className="card-link" to={`/card/${list}/${_id}`}>
                     <div className="card__title">{this.props.card.name}</div>
                 </Link>
              </div>

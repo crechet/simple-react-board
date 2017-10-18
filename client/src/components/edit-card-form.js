@@ -3,8 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { ReactPageClick } from 'react-page-click';
 
-import { fetchCard } from '../actions/actions-boards';
-import { updateCard } from '../actions/actions-boards';
+import { fetchCard, updateCard } from '../actions/actions-boards';
 
 @reduxForm({ form: 'EditCard' })
 class EditCard extends Component {
@@ -16,18 +15,17 @@ class EditCard extends Component {
     }
 
     componentDidMount() {
-        const { listId, id } = this.props.match.params;
-        this.fetchCard({ listId, id });
-        this.handleFormInitialize(this.props.card);
-    }
-
-    fetchCard(values) {
-        this.props.fetchCard(values);
+        if (!this.props.card) {
+            let { id } = this.props.match.params;
+            this.props.fetchCard(id);
+        } else {
+            this.handleFormInitialize(this.props.card);
+        }
     }
 
     onSubmit(values) {
         const data = {
-            listId: this.props.match.params.listId,
+            list: this.props.match.params.list,
             id: this.props.match.params.id,
             name: values.name,
             description: values.description
@@ -115,8 +113,8 @@ class EditCard extends Component {
 }
 
 function mapStateToProps({ cardLists }, ownProps) {
-    const { listId, id } = ownProps.match.params;
-    return { card: cardLists[listId].cards[id] }
+    const { list, id } = ownProps.match.params;
+    return { card: cardLists[list].cards[id] }
 }
 
 export default connect(mapStateToProps, { fetchCard, updateCard })(EditCard);

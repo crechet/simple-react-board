@@ -7,13 +7,9 @@ const cors = require('cors');
 
 // Models.
 require('./models');
-/*require('./models/survey-model');*/
 
 // Establish connection to MongoDB.
 require('./config/db');
-/*mongoose.connect(configKeys.mongoURI, {
-    useMongoClient: true
-});*/
 
 const PORT = process.env.PORT || 3000;
 const app = express();

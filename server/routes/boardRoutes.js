@@ -73,4 +73,26 @@ module.exports = (app) => {
                 res.send(error);
             });
     });
+
+    // Get card.
+    app.get('/api/card/:id', (req, res) => {
+        let { id } = req.params;
+        Card.findOne({ _id: id })
+            .then((response) => {
+                res.send(response);
+            });
+    });
+
+    // Update card data.
+    app.put('/api/card', (req, res) => {
+        let { id, name, description } = req.body;
+        let toUpdate = {};
+        if (name) toUpdate.name = name;
+        if (description) toUpdate.description = description;
+
+        Card.findOneAndUpdate({ _id: id }, toUpdate, { new: true })
+            .then((response) => {
+                res.send(response);
+            })
+    });
 };

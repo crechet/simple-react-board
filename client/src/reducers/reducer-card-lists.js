@@ -22,6 +22,7 @@ export default function (state = {}, action) {
     let data;
     let source;
     let target;
+    let listToUpdate;
     
     function convertCards(list) {
         list.cards = _.keyBy(list.cards, '_id');
@@ -52,10 +53,21 @@ export default function (state = {}, action) {
             let { updatedSource, updatedTarget } = action.payload;
             return { ...state, [updatedSource._id]: updatedSource, [updatedTarget._id]: updatedTarget };
 
-        case constants.ADD_CARD_TO_LIST:
-            let listToUpdate = { ...state[action.payload.list] };
+        case constants.API_ADD_CARD_TO_LIST:
+            listToUpdate = { ...state[action.payload.list] };
             listToUpdate.cards[action.payload._id] = action.payload;
             return { ...state, [action.payload.list]: listToUpdate };
+
+        case constants.API_FETCH_CARD:
+            return state;
+
+        case constants.API_UPDATE_CARD:
+            listToUpdate = { ...state[action.payload.list] };
+            listToUpdate.cards[action.payload._id] = action.payload;
+
+            return { ...state, [action.payload.list]: listToUpdate };
+
+        // TODO: below actions...
 
         case constants.UPDATE_CARD_LISTS_ON_CARD_DROP:
             function cleanCards(cards, badId) {
@@ -95,17 +107,6 @@ export default function (state = {}, action) {
                 updatedState[tempTarget.listId].cards[tempTarget.id] = tempTarget;
                 updatedState[tempSource.listId].cards[tempSource.id] = tempSource;
             }
-            return updatedState;
-
-        case constants.FETCH_CARD:
-            data = action.payload;
-            return state;
-
-        case constants.UPDATE_CARD:
-            data = action.payload;
-            updatedState = {...state};
-            updatedState[data.listId].cards[data.id] = data;
-
             return updatedState;
 
         default:

@@ -18,8 +18,8 @@ class Root extends Component {
             <div className="main-container">
                 <div className="view-container">
                     <Board />
-                    <Route path={this.props.match.url + 'list/:listId/card/:id'}
-                           component={EditCard}/>
+                    <Route path="/card/:list/:id"
+                           component={EditCard} />
                 </div>
             </div>
         );

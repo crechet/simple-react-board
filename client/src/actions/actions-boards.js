@@ -34,7 +34,6 @@ export const apiDeleteList = (listId) => (dispatch) => {
 };
 
 export const apiUpdateList = (data) => (dispatch) => {
-    console.log('ACTION apiUpdateList', data);
     axios.put(`${ROOT_URL}/api/list`, data)
         .then((list) => {
             dispatch({
@@ -61,25 +60,33 @@ export const addCardToList = (card) => (dispatch) => {
     axios.post(`${ROOT_URL}/api/card`, card)
         .then((response) => {
             dispatch({
-                type: constants.ADD_CARD_TO_LIST,
+                type: constants.API_ADD_CARD_TO_LIST,
                 payload: response.data
             });
         });
 };
 
-export function fetchCard(data) {
-    return {
-        type: constants.FETCH_CARD,
-        payload: data
-    }
-}
+export const fetchCard = (id) => (dispatch) => {
+    axios.get(`${ROOT_URL}/api/card/${id}`)
+        .then((response) => {
+            dispatch({
+                type: constants.API_FETCH_CARD,
+                payload: res.data
+            });
+        });
+};
 
-export function updateCard(data) {
-    return {
-        type: constants.UPDATE_CARD,
-        payload: data
-    }
-}
+export const updateCard = (card) => (dispatch) => {
+    axios.put(`${ROOT_URL}/api/card`, card)
+        .then((response) => {
+            dispatch({
+                type: constants.API_UPDATE_CARD,
+                payload: response.data
+            });
+        });
+};
+
+// TODO: add delete card action...
 
 export function updateCardListsOnCardDrop(data) {
     return {
