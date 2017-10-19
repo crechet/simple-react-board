@@ -106,7 +106,39 @@ export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
 
     if (!target.list) {
         // Target is list, not card.
-        // TODO handle case when target is list... Now it's only accept another card as target.
+        // Remove card from source list.
+        axios.put(`${ROOT_URL}/api/pull/card`, source)
+            .then(() => {
+                axios.get(`${ROOT_URL}/api/list/${source.list}`)
+                    .then((list) => {
+                        // Update source list.
+                        dispatch({
+                            type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                            payload: { updatedList: list.data }
+                        });
+                    })
+                    .then(() => {
+                        // Update card list reference.
+                        source.list = target._id;
+                        axios.put(`${ROOT_URL}/api/card`, source)
+                            .then((card) => {
+                                // Add it to target list.
+                                axios.put(`${ROOT_URL}/api/push/card`, card.data)
+                                    .then(() => {
+                                        axios.get(`${ROOT_URL}/api/list/${card.data.list}`)
+                                            .then((list) => {
+                                                // Update target list.
+                                                dispatch({
+                                                    type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                                                    payload: { updatedList: list.data }
+                                                });
+                                            })
+                                    })
+                            })
+                    })
+            })
+
+
     } else if(source.list === target.list) {
         // Source and target cards are in the same list.
         updateSource = axios.put(`${ROOT_URL}/api/card`, { _id: source._id, position: target.position });
@@ -124,7 +156,7 @@ export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
         let tempSourceList = source.list;
         let tempTargetList = target.list;
 
-        // Delete card from source list.
+        // Remove card from source list.
         axios.put(`${ROOT_URL}/api/pull/card`, source)
             .then(() => {
                 // Update source card list reference.

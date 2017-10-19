@@ -74,8 +74,6 @@ export default function (state = {}, action) {
             return { ...state, [action.payload.list]: listToUpdate };
 
         case constants.UPDATE_LISTS_ON_CARD_DROP:
-            console.log('REDUCER UPDATE_LISTS_ON_CARD_DROP', action.payload);
-
             updatedSource = action.payload.updatedSource;
             updatedTarget = action.payload.updatedTarget;
             updatedList = action.payload.updatedList;
@@ -90,52 +88,7 @@ export default function (state = {}, action) {
                 convertCards(updatedList);
 
                 return { ...state, [updatedList._id]: updatedList };
-            } else {
-                return state;
             }
-            break;
-
-
-        // OLD...
-        /*case constants.UPDATE_LISTS_ON_CARD_DROP:
-            function cleanCards(cards, badId) {
-                return _.pickBy(cards, (card) => {
-                    return card.id !== badId;
-                });
-            }
-
-            let tempSource, tempTarget;
-            source = action.payload.source;
-            target = action.payload.target;
-            updatedState = {...state};
-
-            // If target is a CardList.
-            if (!target.listId) {
-                tempSource = _.clone(state[source.listId].cards[source.id]);
-                updatedState[source.listId].cards = cleanCards(updatedState[source.listId].cards, source.id);
-                tempSource.listId = target.id;
-                tempSource.position = _.size(target.cards).toString();
-                updatedState[target.id].cards[source.id] = tempSource;
-            } else {
-                // Objects from State.
-                tempSource = _.clone(state[source.listId].cards[source.id]);
-                tempTarget = _.clone(state[target.listId].cards[target.id]);
-
-                // Update them with payload data.
-                tempSource.listId = target.listId;
-                tempSource.position = target.position;
-                tempTarget.listId = source.listId;
-                tempTarget.position = source.position;
-
-                // Delete original cards from state.
-                updatedState[source.listId].cards = cleanCards(updatedState[source.listId].cards, source.id);
-                updatedState[target.listId].cards = cleanCards(updatedState[target.listId].cards, target.id);
-
-                // Add updated source and target cards to card lists.
-                updatedState[tempTarget.listId].cards[tempTarget.id] = tempTarget;
-                updatedState[tempSource.listId].cards[tempSource.id] = tempSource;
-            }
-            return updatedState;*/
 
         default:
             return state;
