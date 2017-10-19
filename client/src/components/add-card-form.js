@@ -30,7 +30,7 @@ class AddCardForm extends Component {
     onSubmit(values) {
         const card = {
             name: values.cardName,
-            listId: this.props.cardListId
+            list: this.props.cardListId
         };
         this.props.addCardToList(card);
         this.props.onCancelClicked();

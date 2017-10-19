@@ -13,6 +13,16 @@ export const apiFetchLists = () => (dispatch) => {
         });
 };
 
+export const apiFetchList = (id) => (dispatch) => {
+    axios.get(`${ROOT_URL}/api/list/${id}`)
+        .then((list) => {
+            dispatch({
+                type: constants.API_FETCH_LIST,
+                payload: list.data
+            });
+        });
+};
+
 export const apiAddList = (listData) => (dispatch) => {
     axios.post(`${ROOT_URL}/api/list`, listData)
         .then((list) => {
@@ -67,11 +77,12 @@ export const addCardToList = (card) => (dispatch) => {
 };
 
 export const fetchCard = (id) => (dispatch) => {
+    debugger;
     axios.get(`${ROOT_URL}/api/card/${id}`)
         .then((response) => {
             dispatch({
                 type: constants.API_FETCH_CARD,
-                payload: res.data
+                payload: response.data
             });
         });
 };
@@ -91,14 +102,15 @@ export const updateCard = (card) => (dispatch) => {
 export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
     // data contains source and target properties.
     console.log('ACTION updateListsOnCardDrop', { source, target });
+    let updateSource, updateTarget;
 
     if (!target.list) {
         // Target is list, not card.
         // TODO handle case when target is list... Now it's only accept another card as target.
-    } else {
-        // Target is card.
-        let updateSource = axios.put(`${ROOT_URL}/api/card`, { _id: source._id, position: target.position });
-        let updateTarget = axios.put(`${ROOT_URL}/api/card`, { _id: target._id, position: source.position });
+    } else if(source.list === target.list) {
+        // Source and target cards are in the same list.
+        updateSource = axios.put(`${ROOT_URL}/api/card`, { _id: source._id, position: target.position });
+        updateTarget = axios.put(`${ROOT_URL}/api/card`, { _id: target._id, position: source.position });
 
         Promise.all([updateSource, updateTarget])
             .then((response) => {
@@ -107,13 +119,53 @@ export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
                     payload: { updatedSource: response[0].data, updatedTarget: response[1].data }
                 });
             });
+    } else {
+        // If source and target cards are in the different lists.
+        let tempSourceList = source.list;
+        let tempTargetList = target.list;
+
+        // Delete card from source list.
+        axios.put(`${ROOT_URL}/api/pull/card`, source)
+            .then(() => {
+                // Update source card list reference.
+                source.list = tempTargetList;
+                axios.put(`${ROOT_URL}/api/card`, source)
+                    .then((card) => {
+                         // Post it to target list.
+                         axios.put(`${ROOT_URL}/api/push/card`, card.data)
+                            .then(() => {
+                                axios.get(`${ROOT_URL}/api/list/${card.data.list}`)
+                                    .then((list) => {
+                                        dispatch({
+                                            type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                                            payload: { updatedList: list.data }
+                                        });
+                                    })
+
+                            })
+                    })
+            });
+
+        // Delete card from target list.
+        axios.put(`${ROOT_URL}/api/pull/card`, target)
+            .then(() => {
+                // Update target card list reference.
+                target.list = tempSourceList;
+                axios.put(`${ROOT_URL}/api/card`, target)
+                    .then((card) => {
+                        // Post it to source list.
+                        axios.put(`${ROOT_URL}/api/push/card`, card.data)
+                            .then(() => {
+                                axios.get(`${ROOT_URL}/api/list/${card.data.list}`)
+                                    .then((list) => {
+                                        dispatch({
+                                            type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                                            payload: { updatedList: list.data }
+                                        });
+                                    })
+                            })
+                    })
+            });
     }
 };
 
-// OLD...
-/*export function updateListsOnCardDrop(data) {
-    return {
-        type: constants.UPDATE_LISTS_ON_CARD_DROP,
-        payload: data
-    }
-}*/

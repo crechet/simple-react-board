@@ -23,7 +23,7 @@ export default function (state = {}, action) {
     let source;
     let target;
     let listToUpdate;
-    let updatedSource, updatedTarget;
+    let updatedSource, updatedTarget, updatedList;
 
     function convertCards(list) {
         list.cards = _.keyBy(list.cards, '_id');
@@ -78,12 +78,18 @@ export default function (state = {}, action) {
 
             updatedSource = action.payload.updatedSource;
             updatedTarget = action.payload.updatedTarget;
-            debugger;
-            if (updatedSource.list === updatedTarget.list) {
+            updatedList = action.payload.updatedList;
+
+            if (updatedSource && updatedTarget && updatedSource.list === updatedTarget.list) {
                 listToUpdate = { ...state[updatedSource.list] };
                 listToUpdate.cards = { ...listToUpdate.cards, [updatedTarget._id]: updatedTarget, [updatedSource._id]: updatedSource };
 
                 return { ...state, [updatedSource.list]: listToUpdate };
+            } else if (updatedList) {
+                // In this case updatedList contains updated cards collection.
+                convertCards(updatedList);
+
+                return { ...state, [updatedList._id]: updatedList };
             } else {
                 return state;
             }

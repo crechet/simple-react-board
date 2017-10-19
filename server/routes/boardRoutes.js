@@ -12,6 +12,15 @@ module.exports = (app) => {
             });
     });
 
+    // Get all lists.
+    app.get('/api/list/:id', (req, res) => {
+        List.findOne({ _id: req.params.id })
+            .populate('cards')
+            .then((response) => {
+                res.send(response);
+            });
+    });
+
     // Update list.
     app.put('/api/list', (req, res) => {
         let { _id, name, position } = req.body;
@@ -44,19 +53,18 @@ module.exports = (app) => {
 
     // Delete list.
     app.delete('/api/list/:id', (req, res) => {
-        console.log('req', req.params);
         List.findOneAndRemove({ _id: req.params.id })
             .then((result) => {
                 res.status(200).send(result);
             });
     });
 
-    // Add new card.
+    // Add new card to list.
     app.post('/api/card', (req, res) => {
-        let { listId, name } = req.body;
+        let { list, name } = req.body;
         let position;
 
-        List.findOne({ _id: listId })
+        List.findOne({ _id: list })
             .then((list) => {
                 position = list.cards.length + 1;
 
@@ -98,5 +106,39 @@ module.exports = (app) => {
             .then((response) => {
                 res.send(response);
             })
+    });
+
+    // Delete card.
+    app.delete('/api/card', (req, res) => {
+        let { list, _id } = req.body;
+
+        // Update list that contains card to delete.
+        List.update({ _id: list }, { $pull: { cards: _id } })
+            .then(() => {
+                // Delete card.
+                Card.findOneAndRemove({ _id })
+                    .then((response) => res.send(response))
+            })
+            .catch((error) => res.send(error));
+    });
+
+    // Remove existed card from list.
+    app.put('/api/pull/card', (req, res) => {
+        let { list, _id } = req.body;
+
+        // Update list that contains card to remove.
+        List.update({ _id: list }, { $pull: { cards: _id } })
+            .then(() => res.status(200).send('Ok'))
+            .catch((error) => res.send(error));
+    });
+
+    // Add existed card to list.
+    app.put('/api/push/card', (req, res) => {
+        let { list } = req.body;
+
+        // Update list that contains card to insert.
+        List.update({ _id: list }, { $addToSet: { cards: req.body } })
+            .then(() => res.status(200).send('Ok'))
+            .catch((error) => res.send(error));
     });
 };
