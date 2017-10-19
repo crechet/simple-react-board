@@ -20,6 +20,7 @@ module.exports = (app) => {
         if (position) toUpdate.position = position;
 
         List.findOneAndUpdate({ _id }, toUpdate, { new: true })
+            .populate('cards')
             .then((list) => {
                 res.send(list);
             })
@@ -85,12 +86,15 @@ module.exports = (app) => {
 
     // Update card data.
     app.put('/api/card', (req, res) => {
-        let { id, name, description } = req.body;
+        console.log(' *** Update card req.body', req.body);
+        let { _id, name, description, position, list } = req.body;
         let toUpdate = {};
         if (name) toUpdate.name = name;
         if (description) toUpdate.description = description;
+        if (position) toUpdate.position = position;
+        if (list) toUpdate.list = list;
 
-        Card.findOneAndUpdate({ _id: id }, toUpdate, { new: true })
+        Card.findOneAndUpdate({ _id }, toUpdate, { new: true })
             .then((response) => {
                 res.send(response);
             })

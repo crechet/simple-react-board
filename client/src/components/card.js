@@ -10,9 +10,9 @@ import dndTypes from '../constants/dnd-types';
  * */
 const cardSource = {
     beginDrag(props) {
-        const card = props.card;
-        const item = { id: card._id, position: card.position, listId: card.list };
-        return item;
+        /*const card = props.card;
+        const item = { _id: card._id, position: card.position, list: card.list };*/
+        return props.card;
     }
 };
 
@@ -26,7 +26,7 @@ const cardTarget = {
         const target = targetProps.card;
 
         // If Card was dropped on new target.
-        if (source.id !== target.id) {
+        if (source._id !== target._id) {
             targetProps.onDrop({ source, target });
         }
     }
@@ -68,7 +68,7 @@ class Card extends Component {
     }
 
     render() {
-        const { _id, list } = this.props.card;
+        const { _id, list, name } = this.props.card;
         const { connectDragSource, connectDropTarget, isDragging, highlighted } = this.props;
 
         const className = `card${highlighted && !isDragging ? " " + "card_highlighted-as-drop-target" : ""}`;
@@ -76,7 +76,7 @@ class Card extends Component {
         return connectDragSource(connectDropTarget(
             <div className={className}>
                 <Link className="card-link" to={`/card/${list}/${_id}`}>
-                    <div className="card__title">{this.props.card.name}</div>
+                    <div className="card__title">{name}</div>
                 </Link>
              </div>
         ));

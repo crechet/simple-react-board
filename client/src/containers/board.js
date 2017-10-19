@@ -5,9 +5,7 @@ import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
 
 // Actions.
-import { apiFetchLists } from '../actions/actions-boards';
-import { updateListsOnDrop } from '../actions/actions-boards';
-import { updateCardListsOnCardDrop } from '../actions/actions-boards';
+import { apiFetchLists, updateListsOnDrop, updateListsOnCardDrop } from '../actions/actions-boards';
 
 // Components.
 import CardList from '../components/card-list';
@@ -40,7 +38,7 @@ class Board extends Component {
     }
 
     handleDropCardToList({ source, target }) {
-        this.props.updateCardListsOnCardDrop({ source, target });
+        this.props.updateListsOnCardDrop({ source, target });
     }
 
     // Show and hide AddCardListForm form.
@@ -71,7 +69,8 @@ class Board extends Component {
     }
 
     renderLists() {
-        const sortedCardList = _.sortBy(this.props.cardLists, (cardList) => {
+        let { cardLists } = this.props;
+        const sortedCardList = _.sortBy(cardLists, (cardList) => {
             return cardList.position;
         });
 
@@ -106,4 +105,4 @@ function mapStateToProps(state) {
     return { cardLists: state.cardLists };
 }
 
-export default connect(mapStateToProps, { apiFetchLists, updateListsOnDrop, updateCardListsOnCardDrop })(Board);
+export default connect(mapStateToProps, { apiFetchLists, updateListsOnDrop, updateListsOnCardDrop })(Board);

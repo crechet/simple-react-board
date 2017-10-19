@@ -26,7 +26,7 @@ class EditCard extends Component {
     onSubmit(values) {
         const data = {
             list: this.props.match.params.list,
-            id: this.props.match.params.id,
+            _id: this.props.match.params.id,
             name: values.name,
             description: values.description
         };

@@ -88,9 +88,32 @@ export const updateCard = (card) => (dispatch) => {
 
 // TODO: add delete card action...
 
-export function updateCardListsOnCardDrop(data) {
+export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
+    // data contains source and target properties.
+    console.log('ACTION updateListsOnCardDrop', { source, target });
+
+    if (!target.list) {
+        // Target is list, not card.
+        // TODO handle case when target is list... Now it's only accept another card as target.
+    } else {
+        // Target is card.
+        let updateSource = axios.put(`${ROOT_URL}/api/card`, { _id: source._id, position: target.position });
+        let updateTarget = axios.put(`${ROOT_URL}/api/card`, { _id: target._id, position: source.position });
+
+        Promise.all([updateSource, updateTarget])
+            .then((response) => {
+                dispatch({
+                    type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                    payload: { updatedSource: response[0].data, updatedTarget: response[1].data }
+                });
+            });
+    }
+};
+
+// OLD...
+/*export function updateListsOnCardDrop(data) {
     return {
-        type: constants.UPDATE_CARD_LISTS_ON_CARD_DROP,
+        type: constants.UPDATE_LISTS_ON_CARD_DROP,
         payload: data
     }
-}
+}*/

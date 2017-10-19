@@ -23,7 +23,8 @@ export default function (state = {}, action) {
     let source;
     let target;
     let listToUpdate;
-    
+    let updatedSource, updatedTarget;
+
     function convertCards(list) {
         list.cards = _.keyBy(list.cards, '_id');
     }
@@ -47,15 +48,20 @@ export default function (state = {}, action) {
             return _.omit(state, action.payload.data._id);
 
         case constants.API_UPDATE_LIST:
+            convertCards(action.payload.data);
             return { ...state, [action.payload.data._id]: action.payload.data };
 
         case constants.UPDATE_LISTS_ON_DROP:
-            let { updatedSource, updatedTarget } = action.payload;
+            updatedSource = action.payload.updatedSource;
+            updatedTarget = action.payload.updatedTarget;
+            convertCards(updatedSource);
+            convertCards(updatedTarget);
             return { ...state, [updatedSource._id]: updatedSource, [updatedTarget._id]: updatedTarget };
 
         case constants.API_ADD_CARD_TO_LIST:
             listToUpdate = { ...state[action.payload.list] };
-            listToUpdate.cards[action.payload._id] = action.payload;
+            listToUpdate.cards = { ...listToUpdate.cards, [action.payload._id]: action.payload };
+
             return { ...state, [action.payload.list]: listToUpdate };
 
         case constants.API_FETCH_CARD:
@@ -67,9 +73,25 @@ export default function (state = {}, action) {
 
             return { ...state, [action.payload.list]: listToUpdate };
 
-        // TODO: below actions...
+        case constants.UPDATE_LISTS_ON_CARD_DROP:
+            console.log('REDUCER UPDATE_LISTS_ON_CARD_DROP', action.payload);
 
-        case constants.UPDATE_CARD_LISTS_ON_CARD_DROP:
+            updatedSource = action.payload.updatedSource;
+            updatedTarget = action.payload.updatedTarget;
+            debugger;
+            if (updatedSource.list === updatedTarget.list) {
+                listToUpdate = { ...state[updatedSource.list] };
+                listToUpdate.cards = { ...listToUpdate.cards, [updatedTarget._id]: updatedTarget, [updatedSource._id]: updatedSource };
+
+                return { ...state, [updatedSource.list]: listToUpdate };
+            } else {
+                return state;
+            }
+            break;
+
+
+        // OLD...
+        /*case constants.UPDATE_LISTS_ON_CARD_DROP:
             function cleanCards(cards, badId) {
                 return _.pickBy(cards, (card) => {
                     return card.id !== badId;
@@ -107,7 +129,7 @@ export default function (state = {}, action) {
                 updatedState[tempTarget.listId].cards[tempTarget.id] = tempTarget;
                 updatedState[tempSource.listId].cards[tempSource.id] = tempSource;
             }
-            return updatedState;
+            return updatedState;*/
 
         default:
             return state;

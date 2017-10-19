@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 // Actions.
-import { apiDeleteList } from '../actions/actions-boards';
-import { updateCardListsOnCardDrop } from '../actions/actions-boards';
+import { apiDeleteList, updateListsOnCardDrop } from '../actions/actions-boards';
 
 // Components.
 import Card from './card';
@@ -60,7 +59,7 @@ const cardDropTargetForCardList = {
         const target = targetProps.cardList;
         const dropAlreadyHandled = monitor.didDrop();
         // If Card was dropped on Card List.
-        if (source.listId && !target.listId && !dropAlreadyHandled) {
+        if (source.list && !target.list && !dropAlreadyHandled) {
             targetProps.onCardDrop({ source, target });
         }
     }
@@ -102,7 +101,6 @@ function collectCardDropTarget(connect, monitor) {
 
 // Wrap CardList component with DragSource decorator.
 @DragSource(dndTypes.DND_TYPE_CARD_LIST, cardListSource, collectSource)
-// Wrap CardList component with DropTarget decorator.
 @DropTarget(dndTypes.DND_TYPE_CARD_LIST, cardListTarget, collectTarget)
 // Wrap CardList component with DropTarget decorator for Cards.
 @DropTarget(dndTypes.DND_TYPE_CARD, cardDropTargetForCardList, collectCardDropTarget)
@@ -136,7 +134,7 @@ class CardList extends Component {
     handleEditCardListFormClose() { this.setState({ isEditCardListFormShown: false }); }
 
     handleCardDrop({ source, target }) {
-        this.props.updateCardListsOnCardDrop({ source, target });
+        this.props.updateListsOnCardDrop({ source, target });
     }
 
     renderCards() {
@@ -149,7 +147,7 @@ class CardList extends Component {
         return _.map(sortedCards, (card) => {
             return <Card key={card._id}
                          card={card}
-                         listId={card.listId}
+                         list={card.list}
                          onDrop={this.handleCardDrop} />;
         })
     }
@@ -237,4 +235,4 @@ function mapStateToProps(state) {
     return { cardLists: state.cardLists };
 }
 
-export default connect(mapStateToProps, { apiDeleteList, updateCardListsOnCardDrop })(CardList);
+export default connect(mapStateToProps, { apiDeleteList, updateListsOnCardDrop })(CardList);
