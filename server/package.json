@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "server": "node index.js",
     "watch-server": "nodemon index.js",
-    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
     "client-dev": "cross-env NODE_ENV=development npm run client-dev --prefix ../client",
     "client-prod": "cross-env NODE_ENV=production npm run client-prod --prefix ../client",
     "server-dev": "cross-env NODE_ENV=development npm run watch-server",
-    "server-prod": "cross-env NODE_ENV=production npm run watch-server"
+    "server-prod": "cross-env NODE_ENV=production npm run server",
+    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+    "prod": "concurrently \"npm run client-prod\" \"npm run server-prod\""
   },
   "author": "",
   "license": "ISC",
