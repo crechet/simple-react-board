@@ -94,7 +94,6 @@ module.exports = (app) => {
 
     // Update card data.
     app.put('/api/card', (req, res) => {
-        console.log(' *** Update card req.body', req.body);
         let { _id, name, description, position, list } = req.body;
         let toUpdate = {};
         if (name) toUpdate.name = name;
@@ -127,8 +126,9 @@ module.exports = (app) => {
         let { list, _id } = req.body;
 
         // Update list that contains card to remove.
-        List.update({ _id: list }, { $pull: { cards: _id } })
-            .then(() => res.status(200).send('Ok'))
+        List.findOneAndUpdate({ _id: list }, { $pull: { cards: _id } }, { new: true })
+            .populate('cards')
+            .then((updatedList) => res.status(200).send(updatedList))
             .catch((error) => res.send(error));
     });
 
@@ -137,8 +137,9 @@ module.exports = (app) => {
         let { list } = req.body;
 
         // Update list that contains card to insert.
-        List.update({ _id: list }, { $addToSet: { cards: req.body } })
-            .then(() => res.status(200).send('Ok'))
+        List.findOneAndUpdate({ _id: list }, { $addToSet: { cards: req.body } }, { new: true })
+            .populate('cards')
+            .then((updatedList) => res.status(200).send(updatedList))
             .catch((error) => res.send(error));
     });
 };

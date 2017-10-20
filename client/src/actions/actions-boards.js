@@ -102,47 +102,62 @@ export const updateCard = (card) => (dispatch) => {
 export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
     // data contains source and target properties.
     console.log('ACTION updateListsOnCardDrop', { source, target });
-    let updateSource, updateTarget;
+
+    function moveCardListToList(card, toList, position) {
+        // Remove card from source list.
+        axios.put(`${ROOT_URL}/api/pull/card`, card)
+            .then(() => {
+                card.list = toList;
+                card.position = position;
+
+                // Update source card list reference and position.
+                axios.put(`${ROOT_URL}/api/card`, card)
+                    .then((updatedCard) => {
+                        // Post it to target list.
+                        axios.put(`${ROOT_URL}/api/push/card`, updatedCard.data)
+                            .then((updatedList) => {
+                                dispatch({
+                                    type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                                    payload: { updatedList: updatedList.data }
+                                });
+                            })
+                    })
+            });
+    }
 
     if (!target.list) {
         // Target is list, not card.
         // Remove card from source list.
         axios.put(`${ROOT_URL}/api/pull/card`, source)
-            .then(() => {
-                axios.get(`${ROOT_URL}/api/list/${source.list}`)
-                    .then((list) => {
-                        // Update source list.
-                        dispatch({
-                            type: constants.UPDATE_LISTS_ON_CARD_DROP,
-                            payload: { updatedList: list.data }
-                        });
-                    })
-                    .then(() => {
-                        // Update card list reference.
-                        source.list = target._id;
-                        axios.put(`${ROOT_URL}/api/card`, source)
-                            .then((card) => {
-                                // Add it to target list.
-                                axios.put(`${ROOT_URL}/api/push/card`, card.data)
-                                    .then(() => {
-                                        axios.get(`${ROOT_URL}/api/list/${card.data.list}`)
-                                            .then((list) => {
-                                                // Update target list.
-                                                dispatch({
-                                                    type: constants.UPDATE_LISTS_ON_CARD_DROP,
-                                                    payload: { updatedList: list.data }
-                                                });
-                                            })
-                                    })
+            .then((updatedList) => {
+                // Update source list.
+                dispatch({
+                    type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                    payload: { updatedList: updatedList.data }
+                });
+
+                // Update card list reference to target list.
+                source.list = target._id;
+                // Set source card position to be the last at the target list.
+                source.position = Object.keys(target.cards).length + 1;
+
+                axios.put(`${ROOT_URL}/api/card`, source)
+                    .then((updatedCard) => {
+                        // Add it to target list.
+                        axios.put(`${ROOT_URL}/api/push/card`, updatedCard.data)
+                            .then((updatedList) => {
+                                dispatch({
+                                    type: constants.UPDATE_LISTS_ON_CARD_DROP,
+                                    payload: { updatedList: updatedList.data }
+                                });
                             })
                     })
             })
 
-
+    // Source and target cards are in the same list.
     } else if(source.list === target.list) {
-        // Source and target cards are in the same list.
-        updateSource = axios.put(`${ROOT_URL}/api/card`, { _id: source._id, position: target.position });
-        updateTarget = axios.put(`${ROOT_URL}/api/card`, { _id: target._id, position: source.position });
+        let updateSource = axios.put(`${ROOT_URL}/api/card`, { _id: source._id, position: target.position });
+        let updateTarget = axios.put(`${ROOT_URL}/api/card`, { _id: target._id, position: source.position });
 
         Promise.all([updateSource, updateTarget])
             .then((response) => {
@@ -151,53 +166,11 @@ export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
                     payload: { updatedSource: response[0].data, updatedTarget: response[1].data }
                 });
             });
+
+    // If source and target cards are in the different lists.
     } else {
-        // If source and target cards are in the different lists.
-        let tempSourceList = source.list;
-        let tempTargetList = target.list;
-
-        // Remove card from source list.
-        axios.put(`${ROOT_URL}/api/pull/card`, source)
-            .then(() => {
-                // Update source card list reference.
-                source.list = tempTargetList;
-                axios.put(`${ROOT_URL}/api/card`, source)
-                    .then((card) => {
-                         // Post it to target list.
-                         axios.put(`${ROOT_URL}/api/push/card`, card.data)
-                            .then(() => {
-                                axios.get(`${ROOT_URL}/api/list/${card.data.list}`)
-                                    .then((list) => {
-                                        dispatch({
-                                            type: constants.UPDATE_LISTS_ON_CARD_DROP,
-                                            payload: { updatedList: list.data }
-                                        });
-                                    })
-
-                            })
-                    })
-            });
-
-        // Delete card from target list.
-        axios.put(`${ROOT_URL}/api/pull/card`, target)
-            .then(() => {
-                // Update target card list reference.
-                target.list = tempSourceList;
-                axios.put(`${ROOT_URL}/api/card`, target)
-                    .then((card) => {
-                        // Post it to source list.
-                        axios.put(`${ROOT_URL}/api/push/card`, card.data)
-                            .then(() => {
-                                axios.get(`${ROOT_URL}/api/list/${card.data.list}`)
-                                    .then((list) => {
-                                        dispatch({
-                                            type: constants.UPDATE_LISTS_ON_CARD_DROP,
-                                            payload: { updatedList: list.data }
-                                        });
-                                    })
-                            })
-                    })
-            });
+        moveCardListToList(source, target.list, target.position);
+        moveCardListToList(target, source.list, source.position);
     }
 };
 
