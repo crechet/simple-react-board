@@ -14,10 +14,11 @@ class EditCard extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         if (!this.props.card) {
             let { id } = this.props.match.params;
             this.props.fetchCard(id);
+            this.handleFormInitialize(this.props.card);
         } else {
             this.handleFormInitialize(this.props.card);
         }
@@ -112,9 +113,15 @@ class EditCard extends Component {
     }
 }
 
-function mapStateToProps({ cardLists }, ownProps) {
+function mapStateToProps({ cardLists, currentCard }, ownProps) {
     const { list, id } = ownProps.match.params;
-    return { card: cardLists[list].cards[id] }
+    if (list && id && cardLists[list]) {
+        return { card: cardLists[list].cards[id] }
+    } else if (currentCard && currentCard._id) {
+        return { card: currentCard }
+    } else {
+        return { card: null }
+    }
 }
 
 export default connect(mapStateToProps, { fetchCard, updateCard })(EditCard);

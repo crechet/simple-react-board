@@ -10,7 +10,7 @@
     "client-dev": "cross-env NODE_ENV=development npm run client-dev --prefix ../client",
     "client-prod": "cross-env NODE_ENV=production npm run client-prod --prefix ../client",
     "server-dev": "cross-env NODE_ENV=development npm run watch-server",
-    "server-prod": "cross-env NODE_ENV=production npm run start"
+    "server-prod": "cross-env NODE_ENV=production npm run watch-server"
   },
   "author": "",
   "license": "ISC",

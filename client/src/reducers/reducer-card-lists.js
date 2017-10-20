@@ -41,7 +41,6 @@ export default function (state = {}, action) {
                 convertCards(list);
             });
 
-            console.log('lists:', listsCollection);
             return listsCollection;
 
         case constants.API_DELETE_LIST:
@@ -63,9 +62,6 @@ export default function (state = {}, action) {
             listToUpdate.cards = { ...listToUpdate.cards, [action.payload._id]: action.payload };
 
             return { ...state, [action.payload.list]: listToUpdate };
-
-        case constants.API_FETCH_CARD:
-            return state;
 
         case constants.API_UPDATE_CARD:
             listToUpdate = { ...state[action.payload.list] };

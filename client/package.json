@@ -11,8 +11,8 @@
   "scripts": {
     "clean": "rimraf build",
     "build": "npm run clean && webpack",
-    "build-production": "npm run clean && cross-env NODE_ENV=production webpack -p",
-    "client": "webpack-dev-server"
+    "client-prod": "npm run clean && cross-env NODE_ENV=production webpack -p",
+    "client-dev": "webpack-dev-server"
   },
   "author": "",
   "license": "ISC",

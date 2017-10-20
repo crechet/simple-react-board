@@ -15,7 +15,7 @@ const babelLoader = {
     }
 };
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+console.log(' *** webpack: process.env.NODE_ENV', process.env.NODE_ENV);
 
 // CSS, PostCSS Loader.
 const cssLoader = {
@@ -47,6 +47,7 @@ const config = {
         vendor: VENDOR_LIBS
     },
     output: {
+        publicPath: '/',
         path: path.resolve(__dirname, "build"),
         filename: "[name].[chunkhash].js"
     },
