@@ -21,20 +21,25 @@ app.use(bodyParser.json({ type: '*/*' }));
 require('./routes/boardRoutes')(app);
 /*require('./routes/surveyRoutes')(app);*/
 
+console.log(' *** process.env.NODE_ENV', process.env.NODE_ENV);
+
 // Serve static assets in production environment.
 if (process.env.NODE_ENV === 'production') {
+    console.log(' *** server runs in production environment');
     // Express will serve up production assets.
     // Like main.js and main.css.
     // This will return a certain file from client/build folder.
-    app.use(express.static('client/build'));
+    app.use(express.static('../client/build'));
 
     // Express will serve up the index.html if it
-    // doesen't recognize the route.
+    // doesn't recognize the route.
     // This request handler will send index.html back. To any unknown
     // request path.
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-});
+        res.sendFile(path.resolve(__dirname, '../client/build/index.html'));
+    });
+
+    // app.use(express.static(path.join(__dirname, '../client/build/index.html')));
 }
 
 app.listen(PORT);

@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "server": "nodemon index.js",
-    "client": "npm run client --prefix ../client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "watch-server": "nodemon index.js",
+    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+    "client-dev": "cross-env NODE_ENV=development npm run client-dev --prefix ../client",
+    "client-prod": "cross-env NODE_ENV=production npm run client-prod --prefix ../client",
+    "server-dev": "cross-env NODE_ENV=development npm run watch-server",
+    "server-prod": "cross-env NODE_ENV=production npm run start"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +18,7 @@
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.0",
     "cors": "^2.8.4",
+    "cross-env": "^5.1.0",
     "express": "^4.15.5",
     "mongoose": "^4.11.13"
   }
