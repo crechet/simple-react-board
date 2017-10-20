@@ -86,7 +86,6 @@ export default function (state = {}, action) {
             } else if (updatedList) {
                 // In this case updatedList contains updated cards collection.
                 convertCards(updatedList);
-
                 return { ...state, [updatedList._id]: updatedList };
             }
 

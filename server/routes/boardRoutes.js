@@ -125,10 +125,27 @@ module.exports = (app) => {
     app.put('/api/pull/card', (req, res) => {
         let { list, _id } = req.body;
 
-        // Update list that contains card to remove.
+        // Update list that contains card to remove. Remove card from list.
         List.findOneAndUpdate({ _id: list }, { $pull: { cards: _id } }, { new: true })
             .populate('cards')
-            .then((updatedList) => res.status(200).send(updatedList))
+            .then((updatedList) => {
+                // If we pass recalculatePositions flag, it means that card was removed from list.
+                // And remaining cards positions must be recalculated.
+                if (req.body.recalculatePositions) {
+                    let promises = [];
+                    updatedList.cards.forEach((card, i) => {
+                        card.position = i + 1;
+                        promises.push(Card.update({ _id: card._id }, { $set: { position: i + 1 }}));
+                    });
+
+                    Promise.all(promises)
+                        .then(() => {
+                            res.status(200).send(updatedList);
+                        });
+                } else {
+                    res.status(200).send(updatedList);
+                }
+            })
             .catch((error) => res.send(error));
     });
 

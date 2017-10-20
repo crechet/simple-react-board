@@ -77,7 +77,6 @@ export const addCardToList = (card) => (dispatch) => {
 };
 
 export const fetchCard = (id) => (dispatch) => {
-    debugger;
     axios.get(`${ROOT_URL}/api/card/${id}`)
         .then((response) => {
             dispatch({
@@ -101,8 +100,6 @@ export const updateCard = (card) => (dispatch) => {
 
 export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
     // data contains source and target properties.
-    console.log('ACTION updateListsOnCardDrop', { source, target });
-
     function moveCardListToList(card, toList, position) {
         // Remove card from source list.
         axios.put(`${ROOT_URL}/api/pull/card`, card)
@@ -110,7 +107,7 @@ export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
                 card.list = toList;
                 card.position = position;
 
-                // Update source card list reference and position.
+                // Update card list reference and position.
                 axios.put(`${ROOT_URL}/api/card`, card)
                     .then((updatedCard) => {
                         // Post it to target list.
@@ -125,12 +122,12 @@ export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
             });
     }
 
+    // Target is list, not card.
     if (!target.list) {
-        // Target is list, not card.
         // Remove card from source list.
+        source.recalculatePositions = true;
         axios.put(`${ROOT_URL}/api/pull/card`, source)
             .then((updatedList) => {
-                // Update source list.
                 dispatch({
                     type: constants.UPDATE_LISTS_ON_CARD_DROP,
                     payload: { updatedList: updatedList.data }
