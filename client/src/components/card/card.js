@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-import dndTypes from '../constants/dnd-types';
+import dndTypes from '../../constants/dnd-types';
+
+import './card.css'
 
 /**
  * Specifies the Card Drag Source.

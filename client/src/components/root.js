@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
 // Components.
-import Header from './header';
-import Board from '../containers/board';
-import EditCard from './edit-card-form';
+import Header from './header/header';
+import Board from '../containers/board/board';
+import EditCard from './editCardForm/edit-card-form';
 
 class Root extends Component {
     renderHeader() {

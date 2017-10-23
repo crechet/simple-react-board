@@ -11,7 +11,7 @@
     "server-dev": "cross-env NODE_ENV=development npm run watch-server",
     "server-prod": "cross-env NODE_ENV=production npm run server",
     "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-    "prod": "concurrently \"npm run client-prod\" \"npm run server-prod\""
+    "prod": "concurrently \"npm run server-prod\" \"npm run client-prod\""
   },
   "author": "",
   "license": "ISC",
@@ -19,8 +19,10 @@
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.0",
     "cors": "^2.8.4",
-    "cross-env": "^5.1.0",
     "express": "^4.15.5",
     "mongoose": "^4.11.13"
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.0"
   }
 }
