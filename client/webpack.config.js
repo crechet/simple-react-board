@@ -3,7 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const VENDOR_LIBS = [ "lodash", "react", "react-dom", "react-redux", "react-router", "redux", "redux-form", "prop-types" ];
+const VENDOR_LIBS = [ "axios", "lodash", "prop-types", "react", "react-dnd", "react-dnd-html5-backend", "react-dom",
+                      "react-page-click", "react-redux", "react-router", "react-router-dom", "redux", "redux-form",
+                      "redux-promise", "redux-thunk" ];
+
+console.log(' *** webpack: process.env.NODE_ENV', process.env.NODE_ENV);
 
 /* Webpack Loaders */
 // Babel Loader.
@@ -14,8 +18,6 @@ const babelLoader = {
         loader: "babel-loader"
     }
 };
-
-console.log(' *** webpack: process.env.NODE_ENV', process.env.NODE_ENV);
 
 // CSS, PostCSS Loader.
 const cssLoader = {

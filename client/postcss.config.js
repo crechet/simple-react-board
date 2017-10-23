@@ -1,5 +1,4 @@
 module.exports = {
-    // parser: 'sugarss',
     parser:'postcss-scss',
     map: true,
     plugins: {
