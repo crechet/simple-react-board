@@ -23,10 +23,11 @@ const babelLoader = {
 const cssLoader = {
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
         use: [
             {
                 loader: "css-loader",
-                // We’re setting this because we want PostCSS to git @import statements first.
+                // We’re setting this because we want PostCSS to @import statements first.
                 options: { importLoaders: 1, sourceMap: true }
             },
             {

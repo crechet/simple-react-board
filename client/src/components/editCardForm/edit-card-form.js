@@ -3,7 +3,9 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { ReactPageClick } from 'react-page-click';
 
-import { fetchCard, updateCard } from '../actions/actions-boards';
+import './edit-card-form.css';
+
+import { fetchCard, updateCard } from '../../actions/actions-boards';
 
 @reduxForm({ form: 'EditCard' })
 class EditCard extends Component {

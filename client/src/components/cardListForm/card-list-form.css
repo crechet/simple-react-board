@@ -1,0 +1,25 @@
+.card-list-form {
+    min-width: 15em;
+    margin-right: 10px;
+    padding: 1em;
+    border: 1px solid lightcoral;
+    border-radius: $base-border-radius;
+
+    &_borders_tb {
+        border-right: none;
+        border-left: none;
+        border-radius: 0;
+    }
+
+    &_full-width {
+        min-width: 100%;
+    }
+
+    &__label {
+        margin-bottom: 5px;
+    }
+
+    &__btn {
+        margin-right: 5px;
+    }
+}

@@ -4,12 +4,15 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
 
+// Styles.
+import './board.css';
+
 // Actions.
-import { apiFetchLists, updateListsOnDrop, updateListsOnCardDrop } from '../actions/actions-boards';
+import { apiFetchLists, updateListsOnDrop, updateListsOnCardDrop } from '../../actions/actions-boards';
 
 // Components.
-import CardList from '../components/card-list';
-import AddCardListForm from '../components/add-card-list-form';
+import CardList from '../../components/cardList/card-list';
+import AddCardListForm from '../../components/addCardListForm/add-card-list-form';
 
 // Wrap Board component as DragDropContext.
 @DragDropContext(HTML5Backend)

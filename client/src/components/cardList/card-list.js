@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
-import dndTypes from '../constants/dnd-types';
+import dndTypes from '../../constants/dnd-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import './card-list.css';
+
 // Actions.
-import { apiDeleteList, updateListsOnCardDrop } from '../actions/actions-boards';
+import { apiDeleteList, updateListsOnCardDrop } from '../../actions/actions-boards';
 
 // Components.
-import Card from './card';
-import AddCardForm from './add-card-form';
-import AddCardListForm from './add-card-list-form';
+import Card from '../card/card';
+import AddCardForm from '../cardListForm/add-card-form';
+import AddCardListForm from '../addCardListForm/add-card-list-form';
 
 /**
  * Specifies the CardList Drag Source.

@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import reducers from './reducers';
 
 // Import styles.
-import '../styles/styles.css';
+import './styles/styles.css';
 
 // Components.
 import Root from './components/root';

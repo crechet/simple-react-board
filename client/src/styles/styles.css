@@ -1,0 +1,13 @@
+@import "reset/reset.css";
+@import "global/settings.css";
+@import "global/layout.css";
+@import "global/modals.css";
+@import "global/view-container.css";
+
+/* Components */
+@import "../components/header/header.css";
+@import "../containers/board/board.css";
+@import "../components/cardList/card-list.css";
+@import "../components/cardListForm/card-list-form.css";
+@import "../components/card/card.css";
+@import "../components/editCardForm/edit-card-form.css";

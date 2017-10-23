@@ -3,7 +3,9 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { ReactPageClick } from 'react-page-click';
 
-import { addCardToList } from '../actions/actions-boards';
+import './card-list-form.css';
+
+import { addCardToList } from '../../actions/actions-boards';
 
 @reduxForm({ form: 'AddCardForm' })
 class AddCardForm extends Component {
