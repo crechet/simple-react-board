@@ -19,13 +19,12 @@ app.use(bodyParser.json({ type: '*/*' }));
 
 // Pass app to the authRoutes.
 require('./routes/boardRoutes')(app);
-/*require('./routes/surveyRoutes')(app);*/
 
 console.log(' *** process.env.NODE_ENV', process.env.NODE_ENV);
 
 // Serve static assets in production environment.
 if (process.env.NODE_ENV === 'production') {
-    console.log(' *** server runs in production environment');
+    console.log(' *** server is running in production environment');
     // Express will serve up production assets.
     // Like main.js and main.css.
     // This will return a certain file from client/build folder.
@@ -36,11 +35,9 @@ if (process.env.NODE_ENV === 'production') {
     // This request handler will send index.html back. To any unknown
     // request path.
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../client/build/index.html'));
+        res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
     });
-
-    // app.use(express.static(path.join(__dirname, '../client/build/index.html')));
 }
 
 app.listen(PORT);
-console.log(`Server is running at localhost:${PORT}`);
+console.log(` *** server is running at localhost:${PORT}`);

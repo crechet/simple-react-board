@@ -2,26 +2,7 @@ import _ from 'lodash';
 
 import constants from '../constants';
 
-const cardLists = {
-    "1": { id: "1", position: "0", name: "Card List 1", cards: {
-        "1": { id: "1", listId: "1", position: "0", name: "Card 1", description: "Description for Card 1" },
-        "2": { id: "2", listId: "1", position: "1", name: "Card 2", description: "Description for Card 2" }
-    } },
-    "2": { id: "2", position: "1", name: "Card List 2", cards: {
-        "3": { id: "3", listId: "2", position: "0", name: "Card about Soup", description: "Soup is good" }
-    } },
-    "3": { id: "3", position: "2", name: "Card List 3", cards: {} },
-    "4": { id: "4", position: "3", name: "Card List 4", cards: {} }
-};
-
 export default function (state = {}, action) {
-    let updatedState;
-    let name;
-    let cardListId;
-    let cardId;
-    let data;
-    let source;
-    let target;
     let listToUpdate;
     let updatedSource, updatedTarget, updatedList;
 
