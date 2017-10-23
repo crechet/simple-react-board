@@ -14,11 +14,16 @@ class EditCard extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.card && !this.props.card || this.props.card && this.props.card._id !== nextProps.card._id) {
+            this.handleFormInitialize(nextProps.card);
+        }
+    }
+
     componentWillMount() {
         if (!this.props.card) {
             let { id } = this.props.match.params;
             this.props.fetchCard(id);
-            this.handleFormInitialize(this.props.card);
         } else {
             this.handleFormInitialize(this.props.card);
         }
