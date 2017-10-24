@@ -1,4 +1,4 @@
-A simple trello like application. Created to get touch of React.js and MongoDB. You can use drag and drop mechanism to manipulate lists.
+A simple trello like application. Created to get touch of React.js and MongoDB. You can use drag and drop mechanism to manipulate lists and cards.
 
 To start application:
 
