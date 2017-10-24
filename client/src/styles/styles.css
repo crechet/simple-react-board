@@ -3,6 +3,7 @@
 @import "global/layout.css";
 @import "global/modals.css";
 @import "global/view-container.css";
+@import "global/utils.css";
 
 /* Components */
 @import "../components/header/header.css";

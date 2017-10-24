@@ -108,15 +108,16 @@ module.exports = (app) => {
     });
 
     // Delete card.
-    app.delete('/api/card', (req, res) => {
-        let { list, _id } = req.body;
+    app.delete('/api/card/:list/:_id', (req, res) => {
+        let { list, _id } = req.params;
 
         // Update list that contains card to delete.
-        List.update({ _id: list }, { $pull: { cards: _id } })
-            .then(() => {
+        List.findOneAndUpdate({ _id: list }, { $pull: { cards: _id } }, { new: true })
+            .populate('cards')
+            .then((updatedList) => {
                 // Delete card.
                 Card.findOneAndRemove({ _id })
-                    .then((response) => res.send(response))
+                    .then(() => res.send(updatedList))
             })
             .catch((error) => res.send(error));
     });

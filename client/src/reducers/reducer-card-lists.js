@@ -7,13 +7,14 @@ export default function (state = {}, action) {
     let updatedSource, updatedTarget, updatedList;
 
     function convertCards(list) {
+        // if (list.cards)
         list.cards = _.keyBy(list.cards, '_id');
     }
 
     switch (action.type) {
         case constants.API_ADD_LIST:
-            convertCards(action.payload.data);
-            return { ...state, [action.payload.data._id]: action.payload.data };
+            convertCards(action.payload);
+            return { ...state, [action.payload._id]: action.payload };
 
         case constants.API_FETCH_LISTS:
             let listsCollection = _.keyBy(action.payload, '_id');
@@ -25,11 +26,11 @@ export default function (state = {}, action) {
             return listsCollection;
 
         case constants.API_DELETE_LIST:
-            return _.omit(state, action.payload.data._id);
+            return _.omit(state, action.payload._id);
 
         case constants.API_UPDATE_LIST:
-            convertCards(action.payload.data);
-            return { ...state, [action.payload.data._id]: action.payload.data };
+            convertCards(action.payload);
+            return { ...state, [action.payload._id]: action.payload };
 
         case constants.UPDATE_LISTS_ON_DROP:
             updatedSource = action.payload.updatedSource;

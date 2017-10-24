@@ -1,0 +1,15 @@
+.tool {
+    float: right;
+    margin-right: .2em;
+    color: lightgrey;
+    transition: all .3s ease;
+
+    &:hover {
+        color: #8F8F8F;
+        cursor: pointer;
+    }
+
+    &_smaller {
+        font-size: 1em;
+    }
+}

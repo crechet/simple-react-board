@@ -23,16 +23,7 @@ const cardListSource = {
         const cardList = props.cardList;
         const item = { _id: cardList._id, position: cardList.position };
         return item;
-    }/*,
-
-    endDrag(props, monitor) {
-        if (!monitor.didDrop()) {
-            return;
-        }
-
-        // When dropped on a compatible target, do something.
-        // const item = monitor.getItem();
-    }*/
+    }
 };
 
 /**
@@ -210,9 +201,9 @@ class CardList extends Component {
                 <div className={cardListClassName}>
                     <div className="card-list__header clearfix">
                         <p className="card-list__title">{cardList.name}</p>
-                        <span className="card-list__tool glyphicon glyphicon-remove-circle"
+                        <span className="tool glyphicon glyphicon-remove-circle"
                               onClick={this.deleteCardList}></span>
-                        <span className="card-list__tool card-list__tool_smaller glyphicon glyphicon-pencil"
+                        <span className="tool tool_smaller glyphicon glyphicon-pencil"
                               onClick={this.toggleShowEditCardListForm}
                         ></span>
                     </div>

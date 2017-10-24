@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom';
 import { DragSource, DropTarget } from 'react-dnd';
 import dndTypes from '../../constants/dnd-types';
 
+// Styles.
 import './card.css'
+
+// Actions.
+import { deleteCard } from '../../actions/actions-boards';
 
 /**
  * Specifies the Card Drag Source.
@@ -12,8 +16,6 @@ import './card.css'
  * */
 const cardSource = {
     beginDrag(props) {
-        /*const card = props.card;
-        const item = { _id: card._id, position: card.position, list: card.list };*/
         return props.card;
     }
 };
@@ -67,6 +69,13 @@ function collectTarget(connect, monitor) {
 class Card extends Component {
     constructor(props) {
         super(props);
+
+        this.deleteCard = this.deleteCard.bind(this);
+    }
+
+    deleteCard() {
+        let { list, _id } = this.props.card;
+        this.props.deleteCard(list, _id);
     }
 
     render() {
@@ -77,6 +86,8 @@ class Card extends Component {
 
         return connectDragSource(connectDropTarget(
             <div className={className}>
+                <span className="tool glyphicon glyphicon-remove-circle"
+                      onClick={this.deleteCard}></span>
                 <Link className="card-link" to={`/card/${list}/${_id}`}>
                     <div className="card__title">{name}</div>
                 </Link>
@@ -90,4 +101,4 @@ function mapStateToProps({ cardLists }, ownProps) {
     return { card: cardLists[card.list].cards[card._id] }
 }
 
-export default connect(mapStateToProps)(Card);
+export default connect(mapStateToProps, { deleteCard })(Card);

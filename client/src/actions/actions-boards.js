@@ -28,7 +28,7 @@ export const apiAddList = (listData) => (dispatch) => {
         .then((list) => {
             dispatch({
                 type: constants.API_ADD_LIST,
-                payload: list
+                payload: list.data
             });
         });
 };
@@ -38,7 +38,7 @@ export const apiDeleteList = (listId) => (dispatch) => {
         .then((response) => {
             dispatch({
                 type: constants.API_DELETE_LIST,
-                payload: response
+                payload: response.data
             });
         });
 };
@@ -48,7 +48,7 @@ export const apiUpdateList = (data) => (dispatch) => {
         .then((list) => {
             dispatch({
                 type: constants.API_UPDATE_LIST,
-                payload: list
+                payload: list.data
             });
         });
 };
@@ -96,7 +96,15 @@ export const updateCard = (card) => (dispatch) => {
         });
 };
 
-// TODO: add delete card action...
+export const deleteCard = (list, _id) => (dispatch) => {
+    axios.delete(`${ROOT_URL}/api/card/${list}/${_id}`)
+        .then((updatedList) => {
+            dispatch({
+                type: constants.API_UPDATE_LIST,
+                payload: updatedList.data
+            });
+        });
+};
 
 export const updateListsOnCardDrop = ({ source, target }) => (dispatch) => {
     // data contains source and target properties.
